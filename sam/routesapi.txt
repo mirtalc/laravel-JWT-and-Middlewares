@@ -1,0 +1,19 @@
+// Ejercicio 1
+Route::resource('personajes', 'PersonajesController');
+Route::get('mostrarPorAlineacion/{alineacion}', 'PersonajesController@mostrarPorAlineacion');
+
+// Ejercicio 2
+
+Route::post('register', 'UserController@register');
+Route::post('login', 'UserController@authenticate');
+Route::post('me', 'UserController@getAuthenticatedUser');
+                                            
+
+Route::group(['middleware' => ['jwt.verify']], function() {
+    Route::resource('peliculas', 'PeliculaController');
+    Route::get('comicsAll', 'ComicController@index');
+});
+
+Route::group(['middleware' => ['isAdmin']], function() {
+    Route::get('comicsById/{id}', 'ComicController@show');
+});

@@ -1,0 +1,190 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Personajes;
+use Illuminate\Http\Request;
+
+class PersonajesController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+
+        $data = Personajes::all();
+
+        $status = 200;
+        $code = 'Personajes encontrados';
+
+        if (count($data) === 0) {
+            $status = 404;
+            $code = "Personajes no encontrados";
+        }
+
+        return response()->json([
+            "data" => $data,
+            "code" => $code,
+            "status" => $status
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $status = 200;
+        $code = "Personaje creado";
+
+
+        $personaje = new Personajes();
+
+
+        $personaje->nombre = $request->input("nombre");
+        $personaje->poder = $request->input("poder");
+        $personaje->alineacion = $request->input("alineacion");
+
+
+        $personaje->save();
+
+
+        return response()->json([
+            "personaje" => $personaje,
+            "status" => $status,
+            "code" => $code
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $status = 404;
+        $code = "Personaje no encontrado";
+
+        $data = Personajes::find($id);
+
+        if ($data !== null) {
+            $status = 200;
+            $code = "Personaje encontrado";
+        }
+
+        return response()->json([
+            "status" => $status,
+            "code" => $code,
+            "data" => $data
+        ]);
+    }
+
+    public function mostrarPorAlineacion($alineacion)
+    {
+        $status = 404;
+        $code = "Personaje no encontrado";
+
+        $data = Personajes::where("alineacion", $alineacion)->get();
+
+        if ($data !== null) {
+            $status = 200;
+            $code = "Personajes encontrados";
+        }
+
+        return response()->json([
+            "status" => $status,
+            "code" => $code,
+            "data" => $data
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+
+        $code = "Personaje no encontrado";
+        $status = 404;
+
+
+        $personajeEncontrado = Personajes::find($id);
+
+        if ($personajeEncontrado !== null) {
+
+            $personajeEncontrado->nombre = $request->input("nombre");
+            $personajeEncontrado->poder = $request->input("poder");
+            $personajeEncontrado->alineacion = $request->input("alineacion");
+            $personajeEncontrado->update();
+
+            $code = "Personaje actualizado";
+            $status = 200;
+        }
+
+        return response()->json([
+
+            "code" => $code,
+            "data" => $personajeEncontrado,
+            "status" => $status
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $data = Personajes::find($id);
+
+        $status = 404;
+        $code = 'Personaje no encontrado';
+
+        if ($data !== null) {
+            $data->delete();
+            $status = 200;
+            $code = 'Personaje eliminado';
+        }
+
+        return response()->json([
+            "data" => $data,
+            "code" => $code,
+            "status" => $status
+        ]);
+    }
+}
