@@ -29,3 +29,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 });
 
 // Routes for admin users
+Route::group(['middleware' => ['jwt.admin']], function () {
+    Route::get('only-admin', 'DataController@closedOnlyAdmin');
+});
