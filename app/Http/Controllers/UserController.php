@@ -31,7 +31,7 @@ class UserController extends Controller
     }
 
     /**
-     * Registers a user (if the user in putt is validated) and returns the user and a token
+     * Registers a user (if the user input is validated) and returns the user and a token
      */
     public function register(Request $request)
     {
