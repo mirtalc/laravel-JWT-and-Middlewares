@@ -12,9 +12,15 @@ class DataController extends Controller
         return response()->json(compact('data'), 200);
     }
 
-    public function closed()
+    public function closedOnlyLogged()
     {
         $data = "OK: Only authorized users can see this, and you're authorized";
+        return response()->json(compact('data'), 200);
+    }
+
+    public function closedOnlyAdmin()
+    {
+        $data = "OK: Only admin users can see this, and you're an admin";
         return response()->json(compact('data'), 200);
     }
 }
